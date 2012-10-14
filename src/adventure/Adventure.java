@@ -4,6 +4,8 @@
  */
 package adventure;
 
+import java.util.Scanner;
+
 /**
  *
  * @author mazmart
@@ -14,6 +16,21 @@ public class Adventure {
      * @param args the command line arguments
      */
     public static void main(String[] args) {
-        // TODO code application logic here
+        Facade  facade = Facade.getInstance();
+        MazeBuilder maze = new MazeBuilder();
+        maze.buildTemplateMaze();
+        facade.setMaze(maze.build());
+        
+        String cmd;
+        Scanner s = new Scanner(System.in);
+        while (true) {
+            facade.getRoomMsg();
+            System.out.println(facade.getCommands());
+            cmd = s.nextLine();
+            if (cmd.equalsIgnoreCase("k") || cmd.equalsIgnoreCase("Konec")) {
+                break;
+            }
+            facade.make(cmd);
+        }
     }
 }
