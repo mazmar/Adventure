@@ -18,6 +18,7 @@ public class Facade {
     private Room currentRoom;
     private Stack<Room> lastRooms = new Stack<Room>();
     private List<Item> bag = new ArrayList();
+    private boolean endGame = false;
 
     public static Facade getInstance() {
         if (instance == null) {
@@ -26,11 +27,7 @@ public class Facade {
         return instance;
     }
 
-    public void commands() {
-        System.out.println("[Move] to, [Pick] what, [Konec] ");
-    }
-
-    void make(String cmd) {
+    boolean make(String cmd) {
         try {
             Command c = parseCommand(cmd);
             if (c.name.toLowerCase().startsWith("pick")) {
@@ -47,10 +44,11 @@ public class Facade {
         } catch (Exception ex) {
             System.out.println(ex.toString());
         }
+        return this.endGame;
     }
 
     String getCommands() {
-        return currentRoom.getCommands() + " [Back]";
+        return currentRoom.getCommands() + ", [Back]";
     }
 
     void back() {
@@ -81,7 +79,9 @@ public class Facade {
         } else {
             throw new DisallowedCommandException("Room not found on Direction " + c.arg);
         }
-
+        if (this.currentRoom.endRoom) {
+            this.endGame = true;
+        }
     }
 
     private void pick(Command c) throws DisallowedCommandException {
@@ -106,7 +106,17 @@ public class Facade {
         }
     }
 
-    private void talk(Command c) {
+    private void talk(Command c) throws DisallowedCommandException {
         this.currentRoom.talk(c);
+    }
+
+    void getEnd() {
+        if (bag.contains(new Item("Poklad"))){
+            System.out.println("Gratulujem zvitazil si nad drakem a odnesl sis sebou poklad si tym pravym vitezem!!!");
+        } else {
+            System.out.println("Gratulujem zvitazil si nad drakem "
+                    + "\nale nechal si za sebou poklad a jeskyne se za tebou zroutila"
+                    + "\nTo je ale smula!!!");
+        }
     }
 }

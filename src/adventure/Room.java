@@ -18,6 +18,7 @@ public class Room {
     List<Item> items = new ArrayList<Item>();
     List<Person> people = new ArrayList<Person>();
     Obstacle obstacle;
+    boolean endRoom = false;
 
     public Room(String name) {
         this.name = name;
@@ -44,8 +45,12 @@ public class Room {
         }
     }
 
-    void addItem(Item item) {
-        this.items.add(item);
+    void addItem(Object item) {
+        if (item instanceof Item) {
+            this.items.add((Item) item);
+        } else if (item instanceof Person) {
+            this.people.add((Person) item);
+        }
     }
 
     void addObstacle(String name, String desc, boolean unlockable, Item lock) {
@@ -61,15 +66,33 @@ public class Room {
                     .append("[Use] what");
         } else {
 
-            sb.append("[Move] to");
+            sb.append("[Move] ");
+            sb.append(this.getDirections());
             if (!this.items.isEmpty()) {
                 sb.append(", [Pick] what");
             }
-            if (!this.items.isEmpty()) {
+            if (!this.people.isEmpty()) {
                 sb.append(", [Talk] to");
             }
         }
         return sb.toString();
+    }
+
+    public String getDirections() {
+        StringBuilder sb = new StringBuilder("[");
+        if (this.down != null) {
+            sb.append("down ");
+        }
+        if (this.up != null) {
+            sb.append("up ");
+        }
+        if (this.left != null) {
+            sb.append("left ");
+        }
+        if (this.right != null) {
+            sb.append("right ");
+        }
+        return sb.deleteCharAt(sb.length()-1).append("]").toString();
     }
 
     @Override
@@ -77,6 +100,9 @@ public class Room {
         StringBuilder sb = new StringBuilder("You are in " + this.name);
         for (Item item : items) {
             sb.append("\n").append("There is a ").append(item.toString());
+        }
+        for (Person person : people) {
+            sb.append("\n").append("There is a ").append(person.toString());
         }
         return sb.toString();
     }
@@ -136,10 +162,10 @@ public class Room {
     void talk(Command c) throws DisallowedCommandException {
         Person compare = new Person(c.arg);
         int i = this.people.indexOf(compare);
-        if (i!=-1){
+        if (i != -1) {
             Person p = this.people.get(i);
             System.out.println(p.phrase);
-        }else {
+        } else {
             throw new DisallowedCommandException("No such person");
         }
     }

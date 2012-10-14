@@ -22,15 +22,17 @@ public class Adventure {
         facade.setMaze(maze.build());
         
         String cmd;
+        boolean konec = false;
         Scanner s = new Scanner(System.in);
-        while (true) {
+        while (!konec) {
             facade.getRoomMsg();
             System.out.println(facade.getCommands());
             cmd = s.nextLine();
             if (cmd.equalsIgnoreCase("k") || cmd.equalsIgnoreCase("Konec")) {
                 break;
             }
-            facade.make(cmd);
+            konec = facade.make(cmd);
         }
+        facade.getEnd();
     }
 }

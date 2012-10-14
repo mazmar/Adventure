@@ -14,7 +14,7 @@ public class Person {
     String phrase;
 
     Person(String arg) {
-        throw new UnsupportedOperationException("Not yet implemented");
+        this.name = arg;
     }
 
     @Override
@@ -49,4 +49,10 @@ public class Person {
         hash = 17 * hash + (this.name != null ? this.name.hashCode() : 0);
         return hash;
     }
+
+    @Override
+    public String toString() {
+        return "["+this.name+"]";
+    }
+    
 }
