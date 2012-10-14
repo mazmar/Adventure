@@ -41,6 +41,8 @@ public class Facade {
                 this.move(c);
             } else if (c.name.toLowerCase().startsWith("use")) {
                 this.use(c);
+            } else if (c.name.toLowerCase().startsWith("talk")) {
+                this.talk(c);
             }
         } catch (Exception ex) {
             System.out.println(ex.toString());
@@ -102,5 +104,9 @@ public class Facade {
         } else {
             throw new DisallowedCommandException("No such item in bag");
         }
+    }
+
+    private void talk(Command c) {
+        this.currentRoom.talk(c);
     }
 }

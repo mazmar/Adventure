@@ -23,12 +23,18 @@ public class Item {
     }
 
     @Override
-    public boolean equals(Object o) {
-        return this.name.equalsIgnoreCase(((Item) o).name);
-    }
-    
-    public boolean equals(String o) {
-        return this.name.equalsIgnoreCase(o);
+    public boolean equals(Object obj) {
+        if (obj == null) {
+            return false;
+        }
+        if (getClass() != obj.getClass()) {
+            return false;
+        }
+        final Item other = (Item) obj;
+        if ((this.name == null) ? (other.name != null) : !this.name.equals(other.name)) {
+            return false;
+        }
+        return true;
     }
 
     @Override

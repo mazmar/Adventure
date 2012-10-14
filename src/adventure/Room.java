@@ -127,10 +127,21 @@ public class Room {
 
     void use(Item key) throws DisallowedCommandException {
         if (this.obstacle == null) {
-            throw new DisallowedCommandException("No obstacke found");
+            throw new DisallowedCommandException("No obstacle found");
         }
         this.obstacle.unlock(key);
         this.obstacle = null;
+    }
+
+    void talk(Command c) throws DisallowedCommandException {
+        Person compare = new Person(c.arg);
+        int i = this.people.indexOf(compare);
+        if (i!=-1){
+            Person p = this.people.get(i);
+            System.out.println(p.phrase);
+        }else {
+            throw new DisallowedCommandException("No such person");
+        }
     }
 
     private class Obstacle {
